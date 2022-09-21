@@ -2,21 +2,21 @@
   <div class="app-wrapper">
     <div class="app">
       <Navigation />
-      <FooterNote />
       <router-view />
+      <FooterVue />
     </div>
   </div>
 </template>
 
 <script>
 import Navigation from "./components/Navigation.vue";
-import FooterNote from "./components/Footer.vue";
+import FooterVue from "./components/Footer.vue";
 
 export default {
   name: "app",
   components: {
     Navigation,
-    FooterNote,
+    FooterVue,
   },
   data() {
     return {};
@@ -28,7 +28,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
 
 * {
@@ -58,5 +58,17 @@ export default {
 
 .link-light {
   color: #fff;
+}
+.arrow {
+  margin-left: 8px;
+  width: 12px;
+  path {
+    fill: #000;
+  }
+}
+.arrow-light {
+  path {
+    fill: #fff;
+  }
 }
 </style>

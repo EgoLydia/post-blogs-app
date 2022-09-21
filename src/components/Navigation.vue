@@ -103,6 +103,7 @@ a {
   font-size: 24px;
   color: #000;
   text-decoration: none;
+  margin-left: 20px;
 }
 .nav-links {
   position: relative;
