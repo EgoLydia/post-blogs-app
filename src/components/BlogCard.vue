@@ -63,6 +63,7 @@ export default {
       transition: 0.5s ease all;
       &:hover {
         background-color: #fff;
+
         .edit,
         .delete {
           path {

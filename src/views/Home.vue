@@ -18,6 +18,15 @@
         </div>
       </div>
     </div>
+    <div class="updates">
+      <div class="container">
+        <h2>Never Miss a Post. Register for your free account today!</h2>
+        <router-link class="router-button" to="#"
+          >Register for YouBlog
+          <img src="@/assets/Icons/arrow-right-light.svg" alt=""
+        /></router-link>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -95,6 +104,10 @@ export default {
     @media (min-width: 800px) {
       padding: 125px 25px;
       flex-direction: row;
+    }
+    img {
+      width: 15px;
+      height: auto;
     }
     .router-button {
       display: flex;
