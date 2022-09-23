@@ -1,9 +1,9 @@
 <template>
   <div class="app-wrapper">
     <div class="app">
-      <Navigation />
+      <Navigation v-if="!navigationDisable" />
       <router-view />
-      <FooterVue />
+      <FooterVue v-if="!navigationDisable" />
     </div>
   </div>
 </template>
@@ -19,12 +19,32 @@ export default {
     FooterVue,
   },
   data() {
-    return {};
+    return {
+      navigationDisable: null,
+    };
   },
-  created() {},
+  created() {
+    this.checkRoute();
+  },
   mounted() {},
-  methods: {},
-  watch: {},
+  methods: {
+    checkRoute() {
+      if (
+        this.$route.name === "Login" ||
+        this.$route.name === "Register" ||
+        this.$route.name === "ForgotPassword"
+      ) {
+        this.navigationDisable = true;
+        return;
+      }
+      this.navigationDisable = false;
+    },
+  },
+  watch: {
+    $route() {
+      this.checkRoute();
+    },
+  },
 };
 </script>
 

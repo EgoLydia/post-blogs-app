@@ -1,6 +1,6 @@
 <template>
   <div class="blog-card">
-    <div class="icons">
+    <div class="icons" v-show="editPost">
       <div class="icon">
         <img class="edit" src="@/assets/Icons/edit-regular.svg" alt="" />
       </div>
@@ -28,6 +28,11 @@
 export default {
   name: "blogCard",
   props: ["post"],
+  computed: {
+    editPost() {
+      return this.$store.getters.editPost;
+    },
+  },
 };
 </script>
 

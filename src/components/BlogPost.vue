@@ -14,7 +14,7 @@
             alt=""
           />
         </router-link>
-        <router-link class="link" v-else to="#">
+        <router-link class="link" v-else :to="{ name: 'Blogs' }">
           View The Post
           <img
             src="@/assets/Icons/arrow-right-light.svg"
