@@ -1,6 +1,7 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
 
+console.log("here");
 const firebaseConfig = {
   apiKey: "AIzaSyAjm5UYJYUrAnAzCmHpVNvrIYpXkMIY39s",
   authDomain: "fireblog-backend.firebaseapp.com",
@@ -10,9 +11,16 @@ const firebaseConfig = {
   appId: "1:827407635082:web:68798782fda91845f4d373",
 };
 
-const firebaseApp = firebase.initializeApp(firebaseConfig);
-const timestamp = firebase.firestore.FieldValue.serverTimestamp;
+let timestamp;
+let firebaseApp;
+let db;
 
-export { timestamp };
+export const initializeFirebase = () => {
+  firebaseApp = firebase.initializeApp(firebaseConfig);
+  timestamp = firebase.firestore.FieldValue.serverTimestamp;
+  db = firebaseApp.firestore();
+}
 
-export default firebaseApp.firestore();
+export { timestamp};
+
+export default db;
