@@ -49,7 +49,6 @@
 <script>
 import firebase from "firebase/app";
 import "firebase/auth";
-import db from "../firebase/firebaseInit";
 
 export default {
   name: "Register",
@@ -82,6 +81,7 @@ export default {
         );
         console.log(this.userName);
         const response = await createUser;
+        const db = firebase.firestore();
         const database = db.collection("users").doc(response.user.uid);
         await database.set({
           firstName: this.firstName,

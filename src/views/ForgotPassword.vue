@@ -1,9 +1,20 @@
 <template>
   <div class="reset-password">
-    <Modal v-on:close-modal="closeModal" v-if="modalIsVisible" />
-    <Loading v-if="isLoading"/>
+    <Modal
+      :modalMessage="modalMessage"
+      v-on:close-modal="closeModal"
+      v-if="modalIsVisible"
+    />
+    <Loading v-if="isLoading" />
     <div class="form-wrap">
       <form class="reset">
+        <p class="login-register">
+          Go back to
+          <router-link class="router-link" :to="{ name: 'Login' }"
+            >Login</router-link
+          >
+        </p>
+
         <h2>Reset Password</h2>
         <p>Forgot your password? Enter your email to reset it</p>
         <div class="inputs">
@@ -16,7 +27,7 @@
             />
           </div>
         </div>
-        <button>Reset</button>
+        <button @click.prevent="resetPassword">Reset</button>
         <div class="angle"></div>
       </form>
       <div class="background"></div>
@@ -27,6 +38,8 @@
 <script>
 import Modal from "../components/Modal.vue";
 import Loading from "../components/Loading.vue";
+import firebase from "firebase/app";
+import "firebase/auth";
 
 export default {
   name: "ForgotPassword",
@@ -39,13 +52,29 @@ export default {
       email: null,
       modalIsVisible: null,
       modalMessage: "",
-      isLoading: null
+      isLoading: null,
     };
   },
   methods: {
     closeModal() {
       this.modalIsVisible = !this.modalIsVisible;
       this.email = "";
+    },
+    resetPassword() {
+      this.isLoading = true;
+      firebase
+        .auth()
+        .sendPasswordResetEmail(this.email)
+        .then(() => {
+          this.modalMessage = "if account exists you will recieve an email";
+          this.isLoading = false;
+          this.modalIsVisible = true;
+        })
+        .catch(err => {
+          this.modalMessage = err.message;
+          this.modalIsVisible = true;
+          this.isLoading = false;
+        });
     },
   },
 };

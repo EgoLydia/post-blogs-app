@@ -24,19 +24,45 @@ const routes = [
     meta: {
       title: "Login",
     },
-  },{
+  },
+  {
     path: "/register",
     name: "Register",
     component: () => import("../views/Register.vue"),
     meta: {
       title: "Register",
     },
-  },{
+  },
+  {
     path: "/forgot-password",
     name: "ForgotPassword",
     component: () => import("../views/ForgotPassword.vue"),
     meta: {
       title: "Forgot Password",
+    },
+  },
+  {
+    path: "/admin",
+    name: "Admin",
+    component: () => import("../views/Admin.vue"),
+    meta: {
+      title: "Admin",
+    },
+  },
+  {
+    path: "/profile",
+    name: "Profile",
+    component: () => import("../views/Profile.vue"),
+    meta: {
+      title: "Profile",
+    },
+  },
+  {
+    path: "/create-post",
+    name: "CreatePost",
+    component: () => import("../views/CreatePost.vue"),
+    meta: {
+      title: "Create Post",
     },
   },
 ];

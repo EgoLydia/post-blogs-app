@@ -66,10 +66,10 @@
 <script>
 export default {
   name: "footer-vue",
-  data() {
-    return {
-      user: null,
-    };
+  computed: {
+    user() {
+      return this.$store.state.user;
+    },
   },
 };
 </script>
