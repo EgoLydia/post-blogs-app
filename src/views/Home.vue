@@ -21,7 +21,7 @@
     <div v-if="!user" class="updates">
       <div class="container">
         <h2>Never Miss a Post. Register for your free account today!</h2>
-        <router-link class="router-button" to="#"
+        <router-link class="router-button" :to="{ name: 'Register' }"
           >Register for YouBlog
           <img src="@/assets/Icons/arrow-right-light.svg" alt=""
         /></router-link>

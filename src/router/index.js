@@ -65,6 +65,22 @@ const routes = [
       title: "Create Post",
     },
   },
+  {
+    path: "/blog-preview",
+    name: "BlogPreview",
+    component: () => import("../views/BlogPreview.vue"),
+    meta: {
+      title: "Create Post",
+    },
+  },
+  {
+    path: "/view-blog",
+    name: "ViewBlog",
+    component: () => import("../views/ViewBlog.vue"),
+    meta: {
+      title: "View Blog",
+    },
+  },
 ];
 
 const router = createRouter({

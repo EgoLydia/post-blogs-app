@@ -50,8 +50,23 @@ export default createStore({
     },
   },
   mutations: {
+    newBlogPost(state, payload) {
+      state.blogHTML = payload;
+    },
+    fileNameChange(state, payload) {
+      state.blogPhotoName = payload;
+    },
+    createFileURL(state, payload) {
+      state.blogPhotoFileURL = payload;
+    },
+    updateBlogTitle(state, payload) {
+      state.blogTitle = payload;
+    },
     toggleEditPost(state, payload) {
       state.editPost = payload;
+    },
+    openPhotoPreview(state){
+      state.blogPhotoPreview = !state.blogPhotoPreview
     },
     setProfileInfo(state, doc) {
       state.profileId = doc.id;
