@@ -3,7 +3,7 @@
     <BlogPost v-if="!user" :post="welcomeScreen" />
     <BlogPost
       :post="post"
-      v-for="(post, index) in samplePostBlog"
+      v-for="(post, index) in blogPostFeeds"
       :key="index"
     />
     <div class="blog-card-wrap">
@@ -12,7 +12,7 @@
         <div class="blog-cards">
           <BlogCards
             :post="post"
-            v-for="(post, index) in sampleBlogCards"
+            v-for="(post, index) in blogPostCards"
             :key="index"
           />
         </div>
@@ -49,28 +49,20 @@ export default {
         welcomeScreen: true,
         photo: "coding",
       },
-      samplePostBlog: [
-        {
-          title: "This is a filler page",
-          blogHTML: "This is a filler content",
-          blogCoverPhoto: "beautiful-stories",
-        },
-        {
-          title: "This is a filler page",
-          blogHTML: "This is a filler content",
-          blogCoverPhoto: "designed-for-everyone",
-        },
-      ],
     };
   },
-  computed:{
-    sampleBlogCards(){
-      return this.$store.getters.sampleBlogCards
+  computed: {
+    blogPostCards() {
+      return this.$store.getters.blogPostCards;
     },
-     user(){
-      return this.$store.state.user
+
+    blogPostFeeds() {
+      return this.$store.getters.blogPostFeed;
     },
-  }
+    user() {
+      return this.$store.state.user;
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

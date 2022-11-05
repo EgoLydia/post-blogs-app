@@ -1,6 +1,6 @@
 <template>
   <div class="app-wrapper">
-    <div class="app">
+    <div class="app" v-if="postLoaded">
       <Navigation v-if="!navigationDisable" />
       <router-view />
       <FooterVue v-if="!navigationDisable" />
@@ -25,8 +25,14 @@ export default {
       navigationDisable: null,
     };
   },
+  computed: {
+    postLoaded() {
+      return this.$store.state.postLoaded;
+    },
+  },
   created() {
     this.checkRoute();
+    this.$store.dispatch("getPost");
     firebase.auth().onAuthStateChanged(user => {
       this.$store.commit("updateUser", user);
       if (user) {

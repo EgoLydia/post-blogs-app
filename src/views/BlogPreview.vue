@@ -25,7 +25,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .post-view {
   min-height: 100%;
   .container {

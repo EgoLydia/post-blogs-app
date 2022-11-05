@@ -1,22 +1,26 @@
 <template>
   <div class="blog-card">
     <div class="icons" v-show="editPost">
-      <div class="icon">
+      <div class="icon" @click="editBlog">
         <img class="edit" src="@/assets/Icons/edit-regular.svg" alt="" />
       </div>
-      <div class="icon">
+      <div class="icon" @click="deleteBlog">
         <img class="delete" src="@/assets/Icons/trash-regular.svg" alt="" />
       </div>
     </div>
-    <img
-      class="img"
-      :src="require(`../assets/blogCards/${post.blogCoverPhoto}.jpg`)"
-      alt=""
-    />
+    <img class="img" :src="post.blogCoverPhoto" alt="" />
     <div class="info">
       <h4>{{ post.blogTitle }}</h4>
-      <h6>Post on {{ post.blogDate }}</h6>
-      <router-link class="link" to="#">
+      <h6>
+        Post on
+        {{
+          new Date(post.blogDate).toLocaleString("en-us", { dateStyle: "long" })
+        }}
+      </h6>
+      <router-link
+        class="link"
+        :to="{ name: 'ViewBlog', params: { blogId: this.post.blogID } }"
+      >
         View The Post
         <img src="@/assets/Icons/arrow-right-light.svg" alt="" />
       </router-link>
@@ -28,6 +32,17 @@
 export default {
   name: "blogCard",
   props: ["post"],
+  methods: {
+    deleteBlog() {
+      this.$store.dispatch("deletePost", this.post.blogID);
+    },
+    editBlog() {
+      this.$router.push({
+        name: "EditBlog",
+        params: { blogId: this.post.blogID },
+      });
+    },
+  },
   computed: {
     editPost() {
       return this.$store.getters.editPost;

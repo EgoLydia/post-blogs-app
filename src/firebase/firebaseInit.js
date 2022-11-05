@@ -1,7 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
 
-console.log("here");
 const firebaseConfig = {
   apiKey: "AIzaSyAjm5UYJYUrAnAzCmHpVNvrIYpXkMIY39s",
   authDomain: "fireblog-backend.firebaseapp.com",

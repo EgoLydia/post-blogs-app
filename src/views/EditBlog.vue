@@ -36,9 +36,9 @@
         />
       </div>
       <div class="blog-actions">
-        <button @click="uploadBlog">Publish Blog</button>
-        <router-link :to="{ name: 'BlogPreview' }" class="router-button"
-          >Post Preview</router-link
+        <button @click="updateBlog">Save Changes</button>
+        <router-link :to="{ name: 'BlogPreview' }" class="router-button">
+          Preview Changes</router-link
         >
       </div>
     </div>
@@ -69,12 +69,21 @@ export default {
       errorMsg: null,
       file: null,
       isLoading: null,
+      routeID: null,
+      currentBlog: null,
       editorSettings: {
         modules: {
           imageResize: {},
         },
       },
     };
+  },
+  async mounted() {
+    this.routeID = this.$route.params.blogId;
+    this.currentBlog = await this.$store.state.blogPosts.filter(post => {
+      return post.blogID == this.routeID;
+    });
+    this.$store.commit("setBlogState", this.currentBlog[0]);
   },
   methods: {
     imageHandler(file, Editor, cursorLocation, resetUpLoader) {
@@ -104,7 +113,9 @@ export default {
     openPreview() {
       this.$store.commit("openPhotoPreview");
     },
-    uploadBlog() {
+    async updateBlog() {
+      const db = firebase.firestore();
+      const dataBase = await db.collection("blogPosts").doc(this.routeID);
       if (this.blogTitle.length !== 0 && this.blogHTML.length !== 0) {
         if (this.file) {
           this.isLoading = true;
@@ -123,19 +134,14 @@ export default {
             },
             async () => {
               const downloadURL = await docRef.getDownloadURL();
-              const timeStamp = await Date.now();
-              const db = firebase.firestore();
-              const dataBase = await db.collection("blogPosts").doc();
-              await dataBase.set({
-                blogId: dataBase.id,
+              await dataBase.update({
                 blogHTML: this.blogHTML,
                 blogCoverPhoto: downloadURL,
                 blogCoverPhotoName: this.blogPhotoName,
                 blogTitle: this.blogTitle,
                 profileId: this.profileId,
-                date: timeStamp,
               });
-              await this.$store.dispatch("getPost");
+              await this.$store.dispatch("updatePost", this.routeID);
               this.isLoading = false;
               this.$router.push({
                 name: "ViewBlog",
@@ -145,11 +151,17 @@ export default {
           );
           return;
         }
-        this.error = true;
-        this.errorMsg = "Please ensure you uploaded a cover photo!";
-        setTimeout(() => {
-          this.error = false;
-        }, 5000);
+        this.isLoading = true;
+        await dataBase.update({
+          blogHTML: this.blogHTML,
+          blogTitle: this.blogTitle,
+        });
+        await this.$store.dispatch("updatePost", this.routeID);
+        this.isLoading = false;
+        this.$router.push({
+          name: "ViewBlog",
+          params: { blogId: dataBase.id },
+        });
         return;
       }
       this.error = true;

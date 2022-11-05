@@ -5,28 +5,8 @@ import "firebase/auth";
 
 export default createStore({
   state: {
-    sampleBlogCards: [
-      {
-        blogTitle: "Blog Card #1",
-        blogCoverPhoto: "stock-1",
-        blogDate: "May 1, 2021",
-      },
-      {
-        blogTitle: "Blog Card #2",
-        blogCoverPhoto: "stock-2",
-        blogDate: "May 1, 2021",
-      },
-      {
-        blogTitle: "Blog Card #3",
-        blogCoverPhoto: "stock-3",
-        blogDate: "May 1, 2021",
-      },
-      {
-        blogTitle: "Blog Card #4",
-        blogCoverPhoto: "stock-4",
-        blogDate: "May 1, 2021",
-      },
-    ],
+    blogPosts: [],
+    postLoaded: null,
     blogHTML: "Write your blog title here...",
     blogTitle: "",
     blogPhotoName: "",
@@ -42,11 +22,14 @@ export default createStore({
     profileInitials: null,
   },
   getters: {
-    sampleBlogCards(state) {
-      return state.sampleBlogCards;
-    },
     editPost(state) {
       return state.editPost;
+    },
+    blogPostFeed(state) {
+      return state.blogPosts.slice(0, 2);
+    },
+    blogPostCards(state) {
+      return state.blogPosts.slice(2, 6);
     },
   },
   mutations: {
@@ -65,13 +48,12 @@ export default createStore({
     toggleEditPost(state, payload) {
       state.editPost = payload;
     },
-    openPhotoPreview(state){
-      state.blogPhotoPreview = !state.blogPhotoPreview
+    openPhotoPreview(state) {
+      state.blogPhotoPreview = !state.blogPhotoPreview;
     },
     setProfileInfo(state, doc) {
       state.profileId = doc.id;
       state.profileEmail = doc.data().email;
-      console.log(state.profileEmail);
       state.profileFirstName = doc.data().firstName;
       state.profileLastName = doc.data().lastName;
       state.profileUsername = doc.data().username;
@@ -93,8 +75,40 @@ export default createStore({
     changeUsername(state, payload) {
       state.profileUsername = payload;
     },
+    filterBlogPost(state, payload) {
+      state.blogPosts = state.blogPosts.filter(post => post.blogID !== payload);
+    },
+    setBlogState(state, payload) {
+      state.blogHTML = payload.blogHTML;
+      (state.blogTitle = payload.blogTitle),
+        (state.blogPhotoName = payload.blogPhotoName),
+        (state.blogPhotoFileURL = payload.blogCoverPhoto);
+    },
   },
   actions: {
+    async updatePost({ commit, dispatch }, payload) {
+      commit("filterBlogPost", payload);
+      await dispatch("getPost");
+    },
+    async getPost({ state }) {
+      const db = firebase.firestore();
+      const database = await db.collection("blogPosts").orderBy("date", "desc");
+      const dbResults = await database.get();
+      dbResults.forEach(doc => {
+        if (!state.blogPosts.some(post => post.blogID === doc.id)) {
+          const data = {
+            blogID: doc.data().blogId,
+            blogHTML: doc.data().blogHTML,
+            blogCoverPhoto: doc.data().blogCoverPhoto,
+            blogTitle: doc.data().blogTitle,
+            blogDate: doc.data().date,
+            blogPhotoName: doc.data().blogCoverPhotoName,
+          };
+          state.blogPosts.push(data);
+        }
+      });
+      state.postLoaded = true;
+    },
     async getCurrentUser({ commit }) {
       const db = firebase.firestore();
       const dataBase = await db
@@ -114,6 +128,12 @@ export default createStore({
         username: state.profileUsername,
       });
       commit("setProfileInitials");
+    },
+    async deletePost({ commit }, payload) {
+      const db = firebase.firestore();
+      const getPost = await db.collection("blogPosts").doc(payload);
+      await getPost.delete();
+      commit("filterBlogPost", payload);
     },
   },
   modules: {},
